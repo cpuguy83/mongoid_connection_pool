@@ -1,12 +1,13 @@
 # MongoidConnectionPool
 
-If you have ever use Mongoid in a threaded environment such as Sidekiq
-with Rubinius or JRuby, you will quickly find out that it is not safe to use Mongoid.
+If you ever use Mongoid in a threaded environment such as Sidekiq with Rubinius
+or JRuby you will quickly find out that Mongoid does not handle DB connections
+well.
 
 Mongoid by default gives every thread it's own database connection and doesn't
 clean up after itself, so these connections remain open.
 MongoDB will quickly become overloaded and you will no longer be able to connect.
-Often times MongoDB will also likely crash.
+Often times MongoDB itself will also crash.
 
 This gem monkey patches Mongoid (>= 3.1 < 4.0) to add connection pooling.
 We take over how Mongoid handles it's connections, so there is nothing you need
@@ -18,7 +19,7 @@ implementation of connection pooling.
 This is all well and good but it is still as of yet to be released, and won't
 be supported on Mongoid versions < 4.0 (also unreleased).
 
-This monkey patche passes all of Mongoid's specs.
+This monkey patch passes all of Mongoid's specs.
 
 ## Installation
 
@@ -37,6 +38,16 @@ Or install it yourself as:
 ## Usage
 
 Just require mongoid_connection_pool AFTER Mongoid.  That's it.  Easy-peasy.
+You can also take advantage of Mongoid.with_session method.
+This is similar to ActiveRecords 'with_connection'
+
+```ruby
+Mongoid.with_session do
+  # stuff
+end
+```
+With this you are explicitly checking out a connection and checking it back in
+once complete.
 
 ## Contributing
 
