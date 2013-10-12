@@ -49,6 +49,8 @@ end
 With this you are explicitly checking out a connection and checking it back in
 once complete.
 
+You also no longer need to use Kiqstand, the Sidekiq Middleware for Mongoid.
+
 ## Contributing
 
 1. Fork it
