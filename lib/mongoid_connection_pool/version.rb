@@ -1,0 +1,3 @@
+module MongoidConnectionPool
+  VERSION = "0.0.1"
+end
