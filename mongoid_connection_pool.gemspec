@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["cpuguy83@gmail.com"]
   spec.description   = %q{Provides connection pooling for Mongoid}
   spec.summary       = %q{Provides connection pooling for Mongoid}
-  spec.homepage      = "http://www.github.com/cpuguy83/mongoid_connection_pooling"
+  spec.homepage      = "http://www.github.com/cpuguy83/mongoid_connection_pool"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
