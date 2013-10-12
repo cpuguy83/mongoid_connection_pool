@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = MongoidConnectionPool::VERSION
   spec.authors       = ["Brian Goff"]
   spec.email         = ["cpuguy83@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{Provides connection pooling for Mongoid}
+  spec.summary       = %q{Provides connection pooling for Mongoid}
+  spec.homepage      = "http://www.github.com/cpuguy83/mongoid_connection_pooling"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

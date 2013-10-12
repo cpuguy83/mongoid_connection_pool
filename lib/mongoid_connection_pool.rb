@@ -1,5 +1,3 @@
+require 'mongoid'
 require "mongoid_connection_pool/version"
-
-module MongoidConnectionPool
-  # Your code goes here...
-end
+require "mongoid_connection_pool/mongoid"
