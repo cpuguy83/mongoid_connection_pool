@@ -22,5 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 
-  spec.add_runtime_dependency "mongoid"
+  spec.add_runtime_dependency "mongoid", "~> 3.1.0"
 end
