@@ -41,6 +41,19 @@ Just require mongoid_connection_pool AFTER Mongoid.  That's it.  Easy-peasy.
 You can also take advantage of Mongoid.with_session method.
 This is similar to ActiveRecords 'with_connection'
 
+Configure it for your environment with the following options:
+session_pool_size: The max number of DB connections you want to have in the pool
+session_checkout_timeout: Time for a thread to wait for a connection (in seconds) before timing out
+session_reap_frequency: Time, in seconds, for the session to reap unused but checked out sessions
+```ruby
+Mongoid.configure do |config|
+    config.session_pool_size = 5
+    config.session_checkout_timeout = 3
+    config.session_reap_frequency = 3
+end
+```
+
+
 ```ruby
 Mongoid.with_session do
   # stuff
