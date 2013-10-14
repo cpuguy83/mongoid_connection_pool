@@ -38,8 +38,6 @@ Or install it yourself as:
 ## Usage
 
 Just require mongoid_connection_pool AFTER Mongoid.  That's it.  Easy-peasy.
-You can also take advantage of Mongoid.with_session method.
-This is similar to ActiveRecords 'with_connection'
 
 Configure it for your environment with the following options:<br />
 session_pool_size: The max number of DB connections you want to have in the pool<br />
@@ -53,6 +51,8 @@ Mongoid.configure do |config|
 end
 ```
 
+You can also take advantage of Mongoid.with_session method.
+This is similar to ActiveRecords 'with_connection'
 
 ```ruby
 Mongoid.with_session do
