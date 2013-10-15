@@ -129,6 +129,7 @@ module Mongoid
 
       def clear(thread=nil)
         if thread
+          disconnect(thread)
           @reserved_sessions.delete(thread) if session_for(thread)
           @sessions.pop
         else
@@ -137,6 +138,19 @@ module Mongoid
           @available = Queue.new self
         end
         @reserved_sessions
+      end
+
+      def disconnect(thread=Thread.current)
+        synchronize do
+          @session_pool.try(:each) do |name, pool|
+            if thread
+              pool.session_for(thread).try(:disconnect)
+            else
+              pool.sessions.try(:each) { |session| session.disconnect }
+            end
+          end
+        end
+        true
       end
 
       def checkin_from_thread(thread)
