@@ -22,13 +22,17 @@ module Mongoid
         @session_pool[name]
       end
 
-      def disconnect
+      def disconnect(thread=Thread.current)
         synchronize do
-          if @session_pool && @session_pool.any?
-            @session_pool.each {|s| s.disconnect}
-            @session_pool = nil
+          @session_pool.try(:each) do |name, pool|
+            if thread
+              pool.session_for(thread).try(:disconnect)
+            else
+              pool.sessions.try(:each) { |session| session.disconnect }
+            end
           end
         end
+        true
       end
 
       def with_name(name)
