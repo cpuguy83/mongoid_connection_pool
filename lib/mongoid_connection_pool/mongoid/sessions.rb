@@ -24,8 +24,10 @@ module Mongoid
 
       def disconnect
         synchronize do
-          session_pool.each {|s| s.disconnect}
-          @session_pool = nil
+          if @session_pool && @session_pool.any?
+            @session_pool.each {|s| s.disconnect}
+            @session_pool = nil
+          end
         end
       end
 
