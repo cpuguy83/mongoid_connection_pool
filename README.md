@@ -1,4 +1,5 @@
 # Mongoid Connection Pool
+[![Build Status](https://travis-ci.org/cpuguy83/mongoid_connection_pool.png?branch=master)](https://travis-ci.org/cpuguy83/mongoid_connection_pool)
 
 If you ever use Mongoid in a threaded environment such as Sidekiq with Rubinius
 or JRuby you will quickly find out that Mongoid does not handle DB connections
