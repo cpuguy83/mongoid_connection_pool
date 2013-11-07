@@ -23,5 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
 
   spec.add_runtime_dependency "mongoid", "~> 3.1.0"
-  spec.add_runtime_dependency "thread_safe"
+  spec.add_runtime_dependency "thread_safe", "~> 0.1.3"
 end
