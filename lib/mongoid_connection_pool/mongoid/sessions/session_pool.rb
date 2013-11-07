@@ -170,7 +170,7 @@ module Mongoid
       def reap
         @reserved_sessions.keys.each do |thread|
           session = @reserved_sessions[thread]
-          checkin(session) if thread.stop?
+          checkin(session) unless thread.alive?
         end
       end
 
