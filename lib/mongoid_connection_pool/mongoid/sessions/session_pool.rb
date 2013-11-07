@@ -94,15 +94,20 @@ module Mongoid
       attr_reader :sessions, :size, :reaper, :reserved_sessions, :available
       def initialize(opts={})
         super()
-        opts[:name] ||= :default
 
-        @reaper = Reaper.new(opts[:reap_frequency] || 10, self)
+        opts[:name] ||= :default
+        opts[:size] ||= 5
+        opts[:checkout_timeout] ||= 5
+        # Might be false, disables Reaper
+        opts[:reap_frequency] = 3 if opts[:reap_frequency].nil?
+
+        @reaper = Reaper.new(opts[:reap_frequency], self)
         @reaper.run
 
-        @checkout_timeout = opts[:checkout_timeout] || 5
+        @checkout_timeout = opts[:checkout_timeout]
 
-        @size = opts[:size] || 5
-        @name = opts[:name] || :default
+        @size = opts[:size]
+        @name = opts[:name]
         @sessions = []
         @reserved_sessions = ThreadSafe::Cache.new(:initial_capacity => @size)
         @available = Queue.new self
@@ -165,7 +170,7 @@ module Mongoid
       def reap
         @reserved_sessions.keys.each do |thread|
           session = @reserved_sessions[thread]
-          checkin(session) if thread.stop?
+          checkin(session) unless thread.alive?
         end
       end
 

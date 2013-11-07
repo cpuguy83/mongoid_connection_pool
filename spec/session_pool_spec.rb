@@ -95,7 +95,7 @@ describe Mongoid::Sessions::SessionPool do
       Thread.new { session_pool.checkout }
     end
 
-    it 'Reaps sessions from dead/sleeping threads' do
+    it 'Reaps sessions from dead threads' do
       thread.join
 
       expect(session_pool.reap).to be_true
