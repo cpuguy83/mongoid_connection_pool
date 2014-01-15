@@ -205,6 +205,7 @@ module Mongoid
       end
 
       def get_session
+        @reaper.run unless @reaper.alive?
         if session = @available.poll
           session
         elsif @sessions.size < @size
@@ -233,14 +234,21 @@ module Mongoid
       class Reaper
         attr_reader :pool
         attr_reader :frequency
+        attr_reader :reaper
+
         def initialize(frequency, pool)
           @frequency = frequency
           @pool = pool
         end
 
+        def alive?
+          return true unless frequency
+          Thread.list.include?(reaper) && reaper.alive?
+        end
+
         def run
           return unless frequency
-          Thread.new(frequency, pool) do |t, p|
+          @reaper = Thread.new(frequency, pool) do |t, p|
             while true
               sleep t
               p.reap
