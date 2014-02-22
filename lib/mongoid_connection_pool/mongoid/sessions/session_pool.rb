@@ -205,6 +205,8 @@ module Mongoid
       end
 
       def get_session
+        # always double check the reaper is running, if we got forked after it starts we dont have a thread anymore
+        @reaper.run unless @reaper.alive?
         if session = @available.poll
           session
         elsif @sessions.size < @size
@@ -233,14 +235,22 @@ module Mongoid
       class Reaper
         attr_reader :pool
         attr_reader :frequency
+        attr_reader :reaper
+
         def initialize(frequency, pool)
           @frequency = frequency
           @pool = pool
         end
 
+        def alive?
+          return true unless frequency
+          # under rbx 2.2.4 this now works, also works correctly under mri at latest patch levels
+          reaper.alive?
+        end
+
         def run
           return unless frequency
-          Thread.new(frequency, pool) do |t, p|
+          @reaper = Thread.new(frequency, pool) do |t, p|
             while true
               sleep t
               p.reap

@@ -105,6 +105,31 @@ describe Mongoid::Sessions::SessionPool do
 
   end
 
+  describe '.checkout' do
+
+    before do
+      session_pool.clear
+    end
+
+    let(:session) do
+      session_pool.checkout
+    end
+
+    it 'Restarts the Reaper when it dies' do
+      # checkin session
+      session_pool.checkin(session)
+      # kill the reap and wait for it to die
+      session_pool.reaper.reaper.kill
+      session_pool.reaper.reaper.join
+      # reaper should now be dead
+      session_pool.reaper.reaper.alive?.should be_false
+      session_pool.checkout
+      # checkout should restart the reaper
+      session_pool.reaper.alive?.should be_true
+    end
+
+  end
+
   describe '.session_for' do
 
     before do
