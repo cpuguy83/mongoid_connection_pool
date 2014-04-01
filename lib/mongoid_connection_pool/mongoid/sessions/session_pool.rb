@@ -114,13 +114,13 @@ module Mongoid
       end
 
       def checkout
-        unless (session = session_for_thread(Thread.current))
-          synchronize do
+        synchronize do
+          unless (session = session_for(Thread.current))
             session = get_session
             reserve(session)
           end
+          session
         end
-        session
       end
 
       # Returns a session back to the available pool
