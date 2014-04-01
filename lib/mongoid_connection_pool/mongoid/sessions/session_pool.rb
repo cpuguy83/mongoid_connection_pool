@@ -125,11 +125,13 @@ module Mongoid
 
       # Returns a session back to the available pool
       def checkin(session)
-        synchronize do
-          @available.add session
-          release(session)
+        if session
+          synchronize do
+            @available.add session
+            release(session)
+          end
+          true
         end
-        true
       end
 
       def clear(thread=nil)
