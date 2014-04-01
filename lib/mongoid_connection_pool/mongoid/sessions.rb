@@ -9,17 +9,8 @@ module Mongoid
       end
 
       def session_pool(name=:default)
-        if !@session_pool || !@session_pool[name]
-          synchronize do
-            @session_pool ||= {}
-            @session_pool[name] ||= SessionPool.new(
-              :size             => Config.session_pool_size,
-              :name             => name,
-              :checkout_timeout => Config.session_checkout_timeout,
-              :reap_frequency   => Config.session_reap_frequency)
-          end
-        end
-        @session_pool[name]
+        synchronize { @session_pool ||= ThreadSafe::Cache.new }
+        @session_pool.fetch(name) { build_session_pool(name) }
       end
 
       def disconnect(thread=Thread.current)
@@ -55,6 +46,14 @@ module Mongoid
       def reap_current_session(name, thread = Thread.current)
         session_pool(name).checkin_from_thread thread
         true
+      end
+
+      def build_session_pool(name)
+        @session_pool[name] = SessionPool.new(
+          :size             => Config.session_pool_size,
+          :name             => name,
+          :checkout_timeout => Config.session_checkout_timeout,
+          :reap_frequency   => Config.session_reap_frequency)
       end
     end
   end
