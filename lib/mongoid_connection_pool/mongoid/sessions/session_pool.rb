@@ -161,7 +161,7 @@ module Mongoid
       end
 
       def checkin_from_thread(thread)
-        checkin @reserved_sessions[thread]
+        checkin session_for(thread)
         true
       end
 
@@ -174,10 +174,6 @@ module Mongoid
           session = @reserved_sessions[thread]
           checkin(session) unless thread.alive?
         end
-      end
-
-      def session_for_thread(thread)
-        @reserved_sessions[thread]
       end
 
       def session_for(thread)

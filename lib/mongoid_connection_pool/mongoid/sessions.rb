@@ -40,7 +40,7 @@ module Mongoid
       end
 
       def with_name(name)
-        session_pool(name).session_for_thread(Thread.current) ||
+        session_pool(name).session_for(Thread.current) ||
           session_pool(name).checkout
       end
 
